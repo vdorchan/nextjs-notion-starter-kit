@@ -515,6 +515,6 @@
 }
 
 /* 隐藏底部 */
-.notion-row:last-child {
+.index-page .notion-row:last-child {
   display: none;
 }
