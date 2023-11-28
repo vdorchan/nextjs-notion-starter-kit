@@ -134,6 +134,9 @@
 
 .notion-collection-card-cover img {
   border-radius: 16px;
+}
+.notion-collection-card-cover img,
+.notion-collection-card-cover span {
   width: 100% !important;
 }
 
