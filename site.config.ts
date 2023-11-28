@@ -9,15 +9,15 @@ export default siteConfig({
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'Vdor Blog',
+  name: `vdor's blog`,
   domain: 'vdorchan.it',
   author: 'vdorchan',
 
   // open graph metadata (optional)
-  description: 'Example Next.js Notion Starter Kit Site',
+  description: `vdor's blog`,
 
   // social usernames (optional)
-  twitter: 'vdorchan',
+  // twitter: 'vdorchan',
   github: 'vdorchan.github.com',
   linkedin: '',
   // mastodon: '#', // optional mastodon profile URL, provides link verification
@@ -27,6 +27,7 @@ export default siteConfig({
   // default notion icon and cover images for site-wide consistency (optional)
   // page-specific values will override these site-wide defaults
   defaultPageIcon: null,
+  // defaultPageCover: 'https://unsplash.com/photos/_MMP5j_fCqw/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTAzfHxHcmFkaWVudHxlbnwwfDB8fHwxNzAxMTUzMzE4fDA&force=true&w=2400',
   defaultPageCover: null,
   defaultPageCoverPosition: 0.5,
 
@@ -50,16 +51,17 @@ export default siteConfig({
 
   // whether to use the default notion navigation style or a custom one with links to
   // important pages
-  navigationStyle: 'default'
-  // navigationStyle: 'custom',
-  // navigationLinks: [
-  //   {
-  //     title: 'About',
-  //     pageId: 'f1199d37579b41cbabfc0b5174f4256a'
-  //   },
-  //   {
-  //     title: 'Contact',
-  //     pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
-  //   }
-  // ]
+  // navigationStyle: 'default'
+  navigationStyle: 'custom',
+  navigationLinks: [
+    {
+      title: 'About',
+      pageId: 'f1199d37579b41cbabfc0b5174f4256a'
+    },
+    {
+      title: 'Contact',
+      pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
+    }
+  ],
+  showGithubShareButton: false,
 })

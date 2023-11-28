@@ -57,6 +57,22 @@ body {
   background-color: var(--fg-color-1);
 }
 
-::-webkit-scrollbar-track {           
+::-webkit-scrollbar-track {
     background-color: var(--bg-color);
+}
+
+
+:root {
+  --fg-color: #323739;
+  --shadow-color-1: rgba(0,0,0,0.08);
+  --shadow-color-2: rgba(0,0,0,0.05);
+
+  --primary-color: #842626;
+}
+
+* {
+  transition-property: color,background,box-shadow,border-color;
+  transition-delay: 0s,0s,0s,0s;
+  transition-duration: .2s,.2s,.2s,.2s;
+  transition-timing-function: ease,ease,ease,ease;
 }

@@ -1,8 +1,16 @@
 import * as React from 'react'
 
 import styles from './styles.module.css'
+import { getSiteConfig } from '../lib/get-config-value'
 
+// 右上角 github 按钮
 export const GitHubShareButton: React.FC = () => {
+  const isShow = getSiteConfig('showGithubShareButton')
+  // 隐藏右上角按钮
+  if (!isShow) {
+    return null;
+  }
+
   return (
     <a
       href='https://github.com/transitive-bullshit/nextjs-notion-starter-kit'
