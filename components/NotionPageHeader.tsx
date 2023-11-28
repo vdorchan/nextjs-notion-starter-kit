@@ -37,13 +37,34 @@ export const NotionPageHeader: React.FC<{
   block: types.CollectionViewPageBlock | types.PageBlock
 }> = ({ block }) => {
   const { components, mapPageUrl } = useNotionContext()
+  const headerRef = React.useRef<HTMLDivElement>()
+  const [inTop, setInTop] = React.useState({})
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const header = headerRef.current
+      if (header) {
+        const headerHeight = header.getBoundingClientRect().height
+        const scrollY = window.scrollY
+        const wallpaperHeight = document.querySelector('.notion-page-cover-wrapper').getBoundingClientRect().height
+
+        setInTop(scrollY + headerHeight < wallpaperHeight)
+      }
+    }
+    window.addEventListener('scroll', onScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+
 
   if (navigationStyle === 'default') {
     return <Header block={block} />
   }
 
   return (
-    <header className='notion-header'>
+    <header ref={headerRef} className={`notion-header ${inTop ? '' : 'notion-header-scroll'}`}>
       <div className='notion-nav-header'>
         <Breadcrumbs block={block} rootOnly={true} />
 
