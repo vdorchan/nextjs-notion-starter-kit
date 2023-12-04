@@ -64,6 +64,8 @@ export default class MyDocument extends Document {
             <Main />
 
             <NextScript />
+
+            <script src="https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js"></script>
           </body>
         </Html>
       </IconContext.Provider>

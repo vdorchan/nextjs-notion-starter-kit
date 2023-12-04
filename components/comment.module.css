@@ -1,0 +1,8 @@
+.comment {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.comment-twikoo {
+  max-width: 900px;
+}
