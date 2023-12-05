@@ -1,6 +1,8 @@
+'use client'
+
 import * as React from 'react'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -212,13 +214,13 @@ export const NotionPage: React.FC<types.PageProps> = ({
 
   const title = getBlockTitle(block, recordMap) || site.name
 
-  console.log('notion page', {
-    isDev: config.isDev,
-    title,
-    pageId,
-    rootNotionPageId: site.rootNotionPageId,
-    recordMap
-  })
+  // console.log('notion page', {
+  //   isDev: config.isDev,
+  //   title,
+  //   pageId,
+  //   rootNotionPageId: site.rootNotionPageId,
+  //   recordMap
+  // })
 
   if (!config.isServer) {
     // add important objects to the window global for easy debugging
