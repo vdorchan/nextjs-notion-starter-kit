@@ -1,0 +1,137 @@
+import { getTextContent, getDateValue } from 'notion-utils'
+import { NotionAPI } from 'notion-client'
+import BLOG from '../../site.config'
+import formatDate from '../formatDate'
+// import { createHash } from 'crypto'
+import md5 from 'js-md5'
+// import { mapImgUrl } from './mapImage'
+
+/**
+ * 获取页面元素成员属性
+ * @param {*} id
+ * @param {*} block
+ * @param {*} schema
+ * @param {*} authToken
+ * @param {*} tagOptions
+ * @returns
+ */
+export default async function getPageProperties(id, block, schema, authToken, tagOptions) {
+  const rawProperties = Object.entries(block?.[id]?.value?.properties || [])
+  const excludeProperties = ['date', 'multi_select', 'person']
+  const value = block[id]?.value
+  const properties = {}
+  for (let i = 0; i < rawProperties.length; i++) {
+    const [key, val] = rawProperties[i]
+    properties.id = id
+    if (schema[key]?.type && !excludeProperties.includes(schema[key].type)) {
+      properties[schema[key].name.toLowerCase()] = getTextContent(val)
+    } else {
+      switch (schema[key]?.type) {
+        case 'date': {
+          const dateProperty = getDateValue(val)
+          delete dateProperty.type
+          properties[schema[key].name.toLowerCase()] = dateProperty
+          break
+        }
+        case 'select':
+        case 'multi_select': {
+          const selects = getTextContent(val)
+          if (selects[0]?.length) {
+            properties[schema[key].name.toLowerCase()] = selects.split(',')
+          }
+          break
+        }
+        case 'person': {
+          const rawUsers = val.flat()
+          const users = []
+          const api = new NotionAPI({ authToken })
+
+          for (let i = 0; i < rawUsers.length; i++) {
+            if (rawUsers[i][0][1]) {
+              const userId = rawUsers[i][0]
+              const res = await api.getUsers(userId)
+              const resValue =
+                res?.recordMapWithRoles?.notion_user?.[userId[1]]?.value
+              const user = {
+                id: resValue?.id,
+                first_name: resValue?.given_name,
+                last_name: resValue?.family_name,
+                profile_photo: resValue?.profile_photo
+              }
+              users.push(user)
+            }
+          }
+          properties[schema[key].name.toLowerCase()] = users
+          break
+        }
+        default:
+          break
+      }
+    }
+  }
+
+  console.log('properties===', properties)
+  mapProperties(properties)
+  return properties
+}
+
+/**
+ * 映射用户自定义表头
+ */
+function mapProperties(properties) {
+  if (properties?.type === BLOG.NOTION_PROPERTY_NAME.type_post) {
+    properties.type = 'Post'
+  }
+  if (properties?.type === BLOG.NOTION_PROPERTY_NAME.type_page) {
+    properties.type = 'Page'
+  }
+  if (properties?.type === BLOG.NOTION_PROPERTY_NAME.type_notice) {
+    properties.type = 'Notice'
+  }
+  if (properties?.status === BLOG.NOTION_PROPERTY_NAME.status_publish) {
+    properties.status = 'Published'
+  }
+  if (properties?.status === BLOG.NOTION_PROPERTY_NAME.status_invisible) {
+    properties.status = 'Invisible'
+  }
+}
+
+/**
+ * 获取自定义URL
+ * 可以根据变量生成URL
+ * 支持：%year%/%month%/%day%/%slug%
+ * @param {*} postProperties
+ * @returns
+ */
+function generateCustomizeUrl(postProperties) {
+  let fullPrefix = ''
+  const allSlugPatterns = BLOG.POST_URL_PREFIX.split('/')
+  allSlugPatterns.forEach((pattern, idx) => {
+    if (pattern === '%year%' && postProperties?.publishDay) {
+      const formatPostCreatedDate = new Date(postProperties?.publishDay)
+      fullPrefix += formatPostCreatedDate.getUTCFullYear()
+    } else if (pattern === '%month%' && postProperties?.publishDay) {
+      const formatPostCreatedDate = new Date(postProperties?.publishDay)
+      fullPrefix += String(formatPostCreatedDate.getUTCMonth() + 1).padStart(2, 0)
+    } else if (pattern === '%day%' && postProperties?.publishDay) {
+      const formatPostCreatedDate = new Date(postProperties?.publishDay)
+      fullPrefix += String(formatPostCreatedDate.getUTCDate()).padStart(2, 0)
+    } else if (pattern === '%slug%') {
+      fullPrefix += (postProperties.slug ?? postProperties.id)
+    } else if (!pattern.includes('%')) {
+      fullPrefix += pattern
+    } else {
+      return
+    }
+    if (idx !== allSlugPatterns.length - 1) {
+      fullPrefix += '/'
+    }
+  })
+  if (fullPrefix.startsWith('/')) {
+    fullPrefix = fullPrefix.substring(1) // 去掉头部的"/"
+  }
+  if (fullPrefix.endsWith('/')) {
+    fullPrefix = fullPrefix.substring(0, fullPrefix.length - 1) // 去掉尾部部的"/"
+  }
+  return `${fullPrefix}/${(postProperties.slug ?? postProperties.id)}`
+}

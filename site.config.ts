@@ -2,7 +2,7 @@ import { siteConfig } from './lib/site-config'
 
 export default siteConfig({
   // the site's root Notion page (required)
-  rootNotionPageId: 'Blog-e49ba657929b45afa17a4751499b5bd2',
+  rootNotionPageId: 'e49ba657929b45afa17a4751499b5bd2',
 
   // if you want to restrict pages to a single notion workspace (optional)
   // (this should be a Notion ID; see the docs for how to extract this)
@@ -64,4 +64,33 @@ export default siteConfig({
     }
   ],
   showGithubShareButton: false,
+
+
+  /**
+   * new
+   */
+  NOTION_ACCESS_TOKEN: '',
+  NOTION_PROPERTY_NAME: {
+    password: 'password',
+    type: 'type', // 文章类型，
+    type_post: 'Post', // 当type文章类型与此值相同时，为博文。
+    type_page: 'Page', // 当type文章类型与此值相同时，为单页。
+    type_notice:
+          'Notice', // 当type文章类型与此值相同时，为公告。
+    type_menu: 'Menu', // 当type文章类型与此值相同时，为菜单。
+    type_sub_menu:
+          'SubMenu', // 当type文章类型与此值相同时，为子菜单。
+    title: 'title', // 文章标题
+    status: 'status',
+    status_publish:
+          'Published', // 当status状态值与此相同时为发布，可以为中文
+    status_invisible:
+          'Invisible', // 当status状态值与此相同时为隐藏发布，可以为中文 ， 除此之外其他页面状态不会显示在博客上
+    summary: 'summary',
+    slug: 'Slug',
+    category: 'category',
+    date: 'date',
+    tags: 'Tags',
+    icon: 'icon'
+  }
 })

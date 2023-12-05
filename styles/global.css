@@ -76,3 +76,5 @@ body {
   transition-duration: .2s,.2s,.2s,.2s;
   transition-timing-function: ease,ease,ease,ease;
 }
+
+@import './globals.css';

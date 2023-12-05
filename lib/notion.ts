@@ -38,6 +38,7 @@ const getNavigationLinkPages = pMemoize(
 )
 
 export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
+  console.log('hehe')
   let recordMap = await notion.getPage(pageId)
 
   if (navigationStyle !== 'default') {

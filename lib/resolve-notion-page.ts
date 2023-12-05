@@ -10,6 +10,7 @@ import { getPage } from './notion'
 export async function resolveNotionPage(domain: string, rawPageId?: string) {
   let pageId: string
   let recordMap: ExtendedRecordMap
+  console.log('haha')
 
   if (rawPageId && rawPageId !== 'index') {
     pageId = parsePageId(rawPageId)
